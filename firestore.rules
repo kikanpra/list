@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['id', 'userId', 'title', 'category', 'createdDate', 'dueDate', 'completed'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.title is string && data.title.size() <= 250
+        && data.category is string && (data.category in ['Design', 'Study', 'Work', 'Personal', 'Other'])
+        && (!('description' in data) || (data.description is string && data.description.size() <= 2000))
+        && (!('subtasks' in data) || (data.subtasks is list && data.subtasks.size() <= 50))
+        && data.createdDate is string && data.createdDate.size() <= 20
+        && data.dueDate is string && data.dueDate.size() <= 20
+        && data.completed is bool
+        && (!('completedDate' in data) || data.completedDate == null || (data.completedDate is string && data.completedDate.size() <= 20));
+    }
+
+    match /users/{userId}/tasks/{taskId} {
+      allow get, list: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && isValidId(taskId)
+        && incoming().userId == userId
+        && incoming().id == taskId
+        && isValidTask(incoming());
+
+      allow update: if isOwner(userId)
+        && isValidId(taskId)
+        && incoming().userId == userId
+        && incoming().id == taskId
+        && incoming().userId == existing().userId
+        && isValidTask(incoming());
+
+      allow delete: if isOwner(userId)
+        && isValidId(taskId);
+    }
+  }
+}

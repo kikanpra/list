@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A daily productivity task with checklist subtasks and carry-over state",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Unique task identifier"
+        },
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "User ID of the task owner"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 250,
+          "description": "Title of the task"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["Design", "Study", "Work", "Personal", "Other"],
+          "description": "Task category"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional notes and details"
+        },
+        "subtasks": {
+          "type": "array",
+          "description": "Checklist items"
+        },
+        "createdDate": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "Creation date in YYYY-MM-DD"
+        },
+        "dueDate": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "Active or due date in YYYY-MM-DD"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Completion flag"
+        },
+        "completedDate": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "Date completed in YYYY-MM-DD or null"
+        }
+      },
+      "required": ["id", "userId", "title", "category", "createdDate", "dueDate", "completed"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User's private tasks collection"
+    }
+  }
+}

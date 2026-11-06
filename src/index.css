@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Oswald", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  --color-aegean: #1664B0;
+  --color-sand: #EFE8DE;
+  --color-scarlet: #D21624;
+}
+
+:root {
+  --aegean: #1664B0;
+  --sand: #EFE8DE;
+  --scarlet: #D21624;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: #EFE8DE;
+  color: #111827;
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+/* Subtle stationery paper texture pattern */
+.paper-pattern {
+  background-color: #EFE8DE;
+  background-image: radial-gradient(rgba(22, 100, 176, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EFE8DE;
+}
+::-webkit-scrollbar-thumb {
+  background: #1664B0;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D21624;
+}

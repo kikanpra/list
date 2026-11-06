@@ -1,0 +1,8 @@
+{
+  "name": "TO THE LIST",
+  "description": "A modern editorial daily productivity planner with smart carry-over, checklist subtasks, and calendar completion tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
